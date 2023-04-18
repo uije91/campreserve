@@ -1,0 +1,140 @@
+/* input form*/
+.input-form {
+    max-width: 680px;
+
+    margin-top: 80px;
+    padding: 32px;
+
+    background: #fff;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15)
+}
+
+/*Footer 영역*/
+footer{
+    background-color: #24292F;
+    color: white;
+}
+
+.fist-line{
+    border-bottom: 1px; solid-color: #392d23;
+}
+
+.second-line{
+    color: white;
+    text-decoration: none;
+}
+
+/*
+  Footer 미디어 쿼리
+*/
+@media screen and (max-width: 48rem){
+    .first-line{
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 48rem){
+    .second-line{
+        text-align: center;
+    }
+}
+
+/*
+회원가입 폼 CSS
+*/
+input::placeholder{
+    color: #D2D2D2;
+}
+.id_ok{
+    color:#008000;
+    display: none;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 80%;
+}
+
+.id_already{
+    color:#c93b3b;
+    display: none;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 80%;
+}
+
+.pwd_ok{
+    color:#008000;
+    display: none;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 80%;
+}
+
+.pwd_error{
+    color:#c93b3b;
+    display: none;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 80%;
+}
+
+.pwd_same{
+    color:#008000;
+    display: none;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 80%;
+}
+
+.pwd_nosame{
+    color:#c93b3b;
+    display: none;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 80%;
+}
+
+.email_error{
+    color:#c93b3b;
+    display: none;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 80%;
+}
+
+
+/*탭 영역 CSS*/
+.tab-formal{
+    color: #495057;
+}
+
+.tab-formal:hover{
+    color: #495057;
+}
+
+/*링크 스타일 제거*/
+a{
+    color: inherit;
+    text-decoration: none;
+}
+a:hover{
+    color: black;
+    text-decoration: black underline;
+}
+
+.cancel{
+    width: 100%;
+    height: 48px;
+    padding: 0 10px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 16px;
+    background-color: #000;
+    margin-top: 20px;
+}

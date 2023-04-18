@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.camping.dto.MemberVO" alias="member"/>
+		<typeAlias type="com.camping.dto.CampVO" alias="camp"/>
+		<typeAlias type="com.camping.dto.ReserveVO" alias="rev"/>
+		<typeAlias type="com.camping.common.Pagination" alias="page"/>
+	</typeAliases>
+	
+	<!-- SQL 매핑 파일 -->
+	<mappers>
+		<mapper resource="mappings/member-mapping.xml"/>
+		<mapper resource="mappings/camp-mapping.xml"/>
+		<mapper resource="mappings/reserve-mapping.xml"/>
+	</mappers>
+</configuration>

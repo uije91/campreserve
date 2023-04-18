@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CAMP">
+    <!-- 공공데이터 정보 Insert-->
+    <insert id="insertCampData" parameterType="camp">
+        INSERT INTO camp(campNum,camp_name,camp_div,latitude,longitude,camp_address,common_camp,car_camp,glamping,caravan,toilet,shower_room,sink,additional_1,additional_2,approve_date)
+        values (campNum_seq.NEXTVAL,#{camp_name},#{camp_div},#{latitude},#{longitude},#{camp_address},#{common_camp},#{car_camp},#{glamping},#{caravan},#{toilet},#{shower_room},#{sink},#{additional_1},#{additional_2},#{approve_date})
+    </insert>
+
+    <!-- 캠핑이미지 업로드 관련-->
+    <insert id="insertCampImg" parameterType="camp"> INSERT INTO camp_img(imgNum, campNum, saveFolder,saveFile,originFile) VALUES(CAMP_IMG_SEQ.NEXTVAL, #{campNum}, #{saveFolder},#{saveFile},#{originFile}) </insert>
+    <delete id="deleteCampImg" parameterType="camp"> DELETE FROM camp_img WHERE imgNum = #{imgNum} </delete>
+    <select id="getCampImg" resultType="camp"> SELECT imgNum, campNum, saveFile FROM camp_img WHERE imgNum = #{imgNum} </select>
+    <select id="getCampImgList" resultType="camp"> SELECT imgNum, campNum, saveFolder, saveFile, originFile FROM camp_img WHERE campNum = #{campNum} ORDER BY imgNum DESC </select>
+
+
+
+    <!-- campNum 을 조건으로 캠핑장 정보 조회-->
+    <select id="selectCamp" resultType="camp">SELECT * FROM camp WHERE campNum=#{campNum} </select>
+    <!-- campNum 을 조건으로 캠핑장 정보 삭제-->
+    <delete id="deleteCamp" parameterType="int"> DELETE FROM camp WHERE campNum = #{campNum} </delete>
+    <!-- 캠핑장 정보 Insert-->
+    <insert id="insertCamp" parameterType="camp">INSERT INTO camp(campNum,camp_name,camp_div,latitude,longitude,camp_address,common_camp,car_camp,glamping,caravan,toilet,shower_room,sink,additional_1,additional_2,approve_date) VALUES (campNum_seq.NEXTVAL,#{camp_name},#{camp_div, jdbcType=VARCHAR},#{latitude},#{longitude},#{camp_address},#{common_camp},#{car_camp},#{glamping},#{caravan},#{toilet},#{shower_room},#{sink},#{additional_1},#{additional_2},#{approve_date}) </insert>
+    <!-- 캠핑장 정보 Update-->
+    <update id="updateCamp" parameterType="camp">UPDATE camp SET camp_name=#{camp_name},camp_div=#{camp_div, jdbcType=VARCHAR},latitude=#{latitude},longitude=#{longitude},camp_address=#{camp_address},common_camp=#{common_camp},car_camp=#{car_camp},glamping=#{glamping},caravan=#{caravan},toilet=#{toilet},shower_room=#{shower_room},sink=#{sink},additional_1=#{additional_1},additional_2=#{additional_2},approve_date=#{approve_date} WHERE campNum=#{campNum}</update>
+    <!-- 캠핑관리 전체리스트 조회(Admin)-->
+    <select id="getCampList" resultType="camp">
+        SELECT rnum, campNum, camp_name, camp_div, camp_address,common_camp,car_camp,glamping,caravan,toilet,shower_room,sink,additional_1,additional_2, approve_date FROM (
+        SELECT rownum AS rnum, t.* FROM
+        (SELECT * FROM camp WHERE 1=1
+        <choose>
+            <when test="searchType != ''">
+                and lower( ${searchType} ) LIKE '%'|| lower(#{keyword}) ||'%' ORDER BY campNum desc
+            </when>
+            <otherwise>
+                and lower( '%%' ) LIKE '%'|| lower(#{keyword}) ||'%' ORDER BY campNum desc
+            </otherwise>
+        </choose>
+        ) t
+        WHERE ROWNUM <![CDATA[<]]> #{startList}+#{sizePerPage}
+        ) WHERE rnum <![CDATA[>=]]> #{startList}
+    </select>
+    <!-- 전체회원의 수 조회(Admin)-->
+    <select id="totalCampCnt" resultType="int">
+        SELECT COUNT(*) FROM camp WHERE 1=1
+        <choose>
+            <when test="searchType != ''">
+                AND lower( ${searchType} ) like '%'|| lower(#{keyword}) ||'%'
+            </when>
+        </choose>
+    </select>
+</mapper>

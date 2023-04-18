@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="REV">
+    <!-- 캠핑장 예약 관리 -->
+    <insert id="insertCampReservation" parameterType="rev"> INSERT INTO reservation(idx, id, name, tel, camp_name, camp_div, start_date, end_date) VALUES(reservationIdx_seq.NEXTVAL, #{id}, #{name}, #{tel}, #{camp_name}, #{camp_div}, #{start_date}, #{end_date}) </insert>
+    <delete id="deleteCampReservation" parameterType="rev"> DELETE FROM reservation WHERE idx = #{idx} </delete>
+    <update id="updateWriteReview" parameterType="rev"> UPDATE reservation SET write_review = #{write_review} WHERE idx = #{idx} </update>
+    <select id="getReserveCheck" parameterType="rev" resultType="rev"> SELECT * FROM reservation WHERE idx = #{idx} </select>
+
+    <!-- 사용자의 전체 예약 조회-->
+    <select id="getReserveCheckList" resultType="rev">
+        SELECT rownum, Q.*
+        FROM
+            (SELECT rownum AS rnum, K.*
+             FROM (SELECT *
+                   FROM reservation
+                   WHERE id = lower(#{id})
+                   ORDER BY idx DESC) K
+             WHERE rownum <![CDATA[<]]> #{startList}+#{sizePerPage}) Q
+        WHERE rnum <![CDATA[>=]]> #{startList}
+    </select>
+    <!-- 전체 예약수 조회-->
+    <select id="totalRevCount" resultType="int">SELECT COUNT(*) FROM reservation </select>
+
+    <!-- 리뷰 등록 관리 -->
+    <insert id="insertReview" parameterType="rev"> INSERT INTO review(r_idx, id, name, camp_name, review) VALUES(r_idx_seq.NEXTVAL, #{id}, #{name}, #{camp_name}, #{review}) </insert>
+    <delete id="deleteReview" parameterType="rev"> DELETE FROM review WHERE r_idx = #{r_idx} </delete>
+    <update id="updateReviewCheck" parameterType="rev"> UPDATE reservation SET write_review = 'Y' WHERE idx=#{idx} </update>
+    <select id="getReviewList" resultType="rev"> SELECT * FROM review WHERE camp_name = #{camp_name} ORDER BY r_idx DESC </select>
+    <select id="totalCountReview" resultType="int"> SELECT COUNT(*) FROM review WHERE camp_name = #{camp_name} </select>
+</mapper>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MEMBER">
+    <!-- 회원 존재 여부 조회-->
+    <select id="confirmID" resultType="String"> SELECT pwd FROM member WHERE id=#{id} </select>
+    <!-- id를 조건으로 검색-->
+    <select id="getMember" resultType="member"> SELECT * FROM member WHERE id=#{id} </select>
+    <!-- 멤버 추가(insert)-->
+    <insert id="insertMember" parameterType="member"> INSERT INTO member(idx, id, pwd, name, tel, email) VALUES(member_idx.NEXTVAL, #{id}, #{pwd}, #{name}, #{tel}, #{email})</insert>
+    <!-- 멤버 업데이트(update)-->
+    <update id="updateMember" parameterType="member"> UPDATE member SET pwd = #{pwd}, name = #{name}, tel = #{tel} WHERE idx = #{idx} </update>
+    <!-- 멤버 삭제(delete)-->
+    <delete id="deleteMember" parameterType="member"> DELETE FROM member WHERE idx = #{idx} </delete>
+    <!-- 아이디 중복 체크 -->
+    <select id="idCheck" resultType="int"> SELECT NVL(COUNT(*),0) FROM member WHERE id= #{id} </select>
+    <!-- 이메일 중복 체크 -->
+    <select id="emailCheck" resultType="int"> SELECT NVL(COUNT(*),0) FROM member WHERE email= #{email} </select>
+    <!-- 이름과 이메일로 아이디 찾기  -->
+    <select id="selectIdByNameEmail" resultType="String"> SELECT id FROM member WHERE name=#{name} AND email=#{email} </select>
+    <!-- 아이디, 이름, 이메일로 비밀번호 찾기  -->
+    <select id="selectPwdByIdNameEmail" resultType="String"> SELECT pwd FROM member WHERE id=#{id} AND name=#{name} AND email=#{email} </select>
+    <!-- 아이디 이름 이메일값 받아서 비밀번호 변경-->
+    <update id="updatePwd" parameterType="member"> UPDATE member SET pwd=#{pwd} WHERE id=#{id} AND name=#{name} AND email=#{email} </update>
+
+
+
+    <!-- idx 를 조건으로 회원 조회-->
+    <select id="selectMemberAdmin" resultType="member">SELECT * FROM member WHERE idx=#{idx} </select>
+    <!-- idx 를 조건으로 관리자 업데이트-->
+    <update id="updateMemberAdmin" parameterType="member"> UPDATE member SET name=#{name}, tel=#{tel}, email=#{email}, role=#{role} WHERE idx = #{idx} </update>
+
+
+    <!-- 페이지별 멤버 조회-->
+    <select id="getMemberList" resultType="member">
+        SELECT rnum, idx, id, name, tel, email, regdate, role FROM (
+        SELECT rownum AS rnum, t.* FROM
+        (SELECT * FROM MEMBER WHERE 1=1
+        <choose>
+            <when test="searchType != ''">
+                and lower( ${searchType} ) LIKE '%'|| lower(#{keyword}) ||'%' ORDER BY idx desc
+            </when>
+            <otherwise>
+                and lower( '%%' ) LIKE '%'|| lower(#{keyword}) ||'%' ORDER BY idx desc
+            </otherwise>
+        </choose>
+        ) t
+        WHERE ROWNUM <![CDATA[<]]> #{startList}+#{sizePerPage}
+        ) WHERE rnum <![CDATA[>=]]> #{startList}
+    </select>
+    <!-- 전체회원의 수 조회-->
+    <select id="totalMemberCnt" resultType="int">
+        SELECT COUNT(*) FROM member WHERE 1=1
+        <choose>
+            <when test="searchType != ''">
+                AND lower( ${searchType} ) like '%'|| lower(#{keyword}) ||'%'
+            </when>
+        </choose>
+    </select>
+</mapper>

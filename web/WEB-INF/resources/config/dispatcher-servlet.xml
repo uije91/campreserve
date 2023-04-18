@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <context:component-scan base-package="com.camping.controller"/>
+    <mvc:annotation-driven/>
+
+    <!-- 리소스 경로 설정-->
+    <mvc:resources mapping="/images/**" location="/WEB-INF/resources/images/"/>
+    <mvc:resources mapping="/css/**" location="/WEB-INF/resources/css/"/>
+    <mvc:resources mapping="/js/**" location="/WEB-INF/resources/js/"/>
+    <mvc:resources mapping="/member/**" location="/WEB-INF/views/member/"/>
+    <mvc:resources mapping="/include/**" location="/WEB-INF/views/include/"/>
+    <mvc:resources mapping="/camp/**" location="/WEB-INF/views/camp/"/>
+    <mvc:resources mapping="/admin/**" location="/WEB-INF/views/admin/"/>
+    <mvc:resources mapping="/reserve/**" location="/WEB-INF/views/reserve"/>
+
+
+    <!-- 파일 전송 설정 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="10485760"/>
+        <property name="maxInMemorySize" value="4096"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+
+    <!-- JSP View Resolver -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/views/"/>
+        <property name="suffix" value=".jsp"/>
+        <property name="contentType" value="text/html;charset=UTF-8"/>
+    </bean>
+</beans>
